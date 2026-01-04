@@ -4,18 +4,26 @@ pub fn make_grid(input: &str) -> Vec<Vec<char>> {
     let height: usize = input.lines().count();
     let width: usize = input.lines().next().unwrap().len();
     let mut grid: Vec<Vec<char>> = vec![vec![' '; width]; height];
-
+    
+    let mut x = 0;
+    let mut y = 0;
     for line in input.lines() {
         for c in line.chars() {
-
+            grid[y][x] = c;
+            x = x + 1;
         }
+        y = y + 1;
     }
 
     grid
 }
 
 pub fn part_one(input: &str) -> Option<u64> {
-    None
+    let height: usize = input.lines().count();
+    let width: usize = input.lines().next().unwrap().len();
+    let mut grid= make_grid(input);
+    
+    
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
