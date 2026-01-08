@@ -24,8 +24,25 @@ pub fn part_one(input: &str) -> Option<u64> {
     Some(ans)
 }
 
+pub fn fmt_nums(input: &str) -> Vec<Vec<u64>> {
+    let height = input.lines().count();
+    let mut grid: Vec<Vec<u64>> = Vec::new();
+    let mut str_grid: Vec<Vec<&str>> = Vec::new();
+
+    for i in 0..height-1 {
+        let cur: Vec<&str> = input.lines().nth(i).unwrap().split_whitespace().collect();
+        for x in cur {
+            let nums: Vec<&str> = x.split("").collect();
+        }
+    }
+
+    grid
+}
+
 pub fn part_two(input: &str) -> Option<u64> {
-    None
+    let height = input.lines().count();
+    let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
+    Some(5)
 }
 
 #[cfg(test)]
