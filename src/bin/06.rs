@@ -22,75 +22,77 @@ pub fn part_one(input: &str) -> Option<u64> {
 
     Some(ans)
 }
- 
-// pub fn fmt_nums(input: &str) -> Vec<Vec<u64>> {
-//     let height = input.lines().count();
-//     let width = input.lines().nth(0).unwrap().split_whitespace().count();
-//     let mut grid: Vec<Vec<u64>> = Vec::new();
-//     let mut str_grid: Vec<Vec<String>> = Vec::new();
-//     let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
 
-//     for _ in 0..width { str_grid.push(Vec::new()) }
-
-//     for i in 0..height-1 {
-//         let cur: Vec<String> = input.lines().nth(i).unwrap().split_whitespace().map(String::from).collect();
-//         let mut y = 0;
-//         for x in cur {
-//             let mut nums: Vec<char> = x.chars().collect();
-//             if associated_operators[y] == "*" {
-//                 nums.reverse();
-//             } 
-//             let mut x = 0;
-//             for num in nums {
-//                 match str_grid[y].get(x) {
-//                     Some(_) => str_grid[y][x].push(num),
-//                     None => {
-//                         str_grid[y].push(String::new());
-//                         str_grid[y][x].push(num);
-//                     },
-//                 }
-//                 x += 1;
-//             }
-//             y += 1;
-//         }
-//     }
-
-//     grid = str_grid.iter().map(|row| {
-//         row.iter()
-//         .map(|s| s.parse::<u64>().unwrap())
-//         .collect()
-//     }).collect();
-
-//     grid
-// }
+pub fn print_string_grid(grid: &Vec<Vec<String>>) {
+    for row in grid {
+        for cell in row {
+            print!("\"{}\" ", cell);
+        }
+        println!();
+    }
+}
 
 pub fn part_two(input: &str) -> Option<u64> {
     let height = input.lines().count();
     let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
-    // associated_operators.reverse();
-    let width = input.lines().nth(0).unwrap().split_whitespace().count();
-    let nums: Vec<Vec<u64>> = Vec::new();
-    let lines: Vec<String> = input.lines().collect();
+    let mut nums_as_str: Vec<Vec<String>> = Vec::new();
+    let lines: Vec<&str> = input.lines().collect();
+    
+    nums_as_str.push(Vec::new());
+    nums_as_str[0].push(String::new());
+    let mut cur_strs = 0;
+    let mut cur_str = 0;
+    for i1 in 0..lines[0].len() {
+        
+        let mut space_count = 0;
+        
+        for i2 in 0..lines.len() - 1 {
+            let cur_char = lines[i2].chars().nth(i1).unwrap();
+            println!("{}", cur_char);
+            if cur_char != ' ' {
+                nums_as_str[cur_strs][cur_str].push(cur_char);
+            } else {
+                space_count += 1
+            }
+        }
 
-    for i in 0..lines.len() {
-
+        if space_count == height - 1 {
+            nums_as_str[cur_strs].remove(cur_str);
+            cur_strs += 1;
+            cur_str = 0;
+            nums_as_str.push(Vec::new());
+            nums_as_str[cur_strs].push(String::new());
+        } else {
+            cur_str += 1;
+            nums_as_str[cur_strs].push(String::new());
+        }
     }
+    nums_as_str[cur_strs].remove(cur_str);
+
+    print_string_grid(&nums_as_str);
+    let mut nums: Vec<Vec<u64>> = Vec::new();
+    nums = nums_as_str.iter().map(|row| {
+        row.iter()
+        .map(|s| s.parse::<u64>().unwrap())
+        .collect()
+    }).collect();
 
     let mut result: u64 = 0;
 
-    for i in 0..width {
-        let mut temp: u64 = nums[i][0];
-        if associated_operators[i] == "*" {
-            for x in 1..nums[i].len() {
-                temp *= nums[i][x];
-            }
-        } else {
-            for x in 1..nums[i].len() {
-                temp += nums[i][x];
+    for (i, num_arr) in nums.iter().enumerate() {
+        let mut cur_num: u64 = 0;
+        for (i2, num) in num_arr.iter().enumerate() {
+            if i2 == 0 {
+                cur_num = *num;
+            } else {
+                if associated_operators[i] == "*" {
+                    cur_num *= *num;
+                } else {
+                    cur_num += *num;
+                }
             }
         }
-        result += temp;
-        println!("{} {}", temp, result)
+        result += cur_num;
     }
 
     Some(result)
