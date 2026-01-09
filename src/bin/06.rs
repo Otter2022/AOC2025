@@ -1,6 +1,5 @@
 advent_of_code::solution!(6);
 
-
 pub fn part_one(input: &str) -> Option<u64> {
     let height = input.lines().count();
     let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
@@ -23,26 +22,78 @@ pub fn part_one(input: &str) -> Option<u64> {
 
     Some(ans)
 }
+ 
+// pub fn fmt_nums(input: &str) -> Vec<Vec<u64>> {
+//     let height = input.lines().count();
+//     let width = input.lines().nth(0).unwrap().split_whitespace().count();
+//     let mut grid: Vec<Vec<u64>> = Vec::new();
+//     let mut str_grid: Vec<Vec<String>> = Vec::new();
+//     let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
 
-pub fn fmt_nums(input: &str) -> Vec<Vec<u64>> {
-    let height = input.lines().count();
-    let mut grid: Vec<Vec<u64>> = Vec::new();
-    let mut str_grid: Vec<Vec<&str>> = Vec::new();
+//     for _ in 0..width { str_grid.push(Vec::new()) }
 
-    for i in 0..height-1 {
-        let cur: Vec<&str> = input.lines().nth(i).unwrap().split_whitespace().collect();
-        for x in cur {
-            let nums: Vec<&str> = x.split("").collect();
-        }
-    }
+//     for i in 0..height-1 {
+//         let cur: Vec<String> = input.lines().nth(i).unwrap().split_whitespace().map(String::from).collect();
+//         let mut y = 0;
+//         for x in cur {
+//             let mut nums: Vec<char> = x.chars().collect();
+//             if associated_operators[y] == "*" {
+//                 nums.reverse();
+//             } 
+//             let mut x = 0;
+//             for num in nums {
+//                 match str_grid[y].get(x) {
+//                     Some(_) => str_grid[y][x].push(num),
+//                     None => {
+//                         str_grid[y].push(String::new());
+//                         str_grid[y][x].push(num);
+//                     },
+//                 }
+//                 x += 1;
+//             }
+//             y += 1;
+//         }
+//     }
 
-    grid
-}
+//     grid = str_grid.iter().map(|row| {
+//         row.iter()
+//         .map(|s| s.parse::<u64>().unwrap())
+//         .collect()
+//     }).collect();
+
+//     grid
+// }
 
 pub fn part_two(input: &str) -> Option<u64> {
     let height = input.lines().count();
     let associated_operators: Vec<&str> = input.lines().nth(height - 1).unwrap().split_whitespace().collect();
-    Some(5)
+    // associated_operators.reverse();
+    let width = input.lines().nth(0).unwrap().split_whitespace().count();
+    let nums: Vec<Vec<u64>> = Vec::new();
+    let lines: Vec<String> = input.lines().collect();
+
+    for i in 0..lines.len() {
+
+    }
+
+    let mut result: u64 = 0;
+
+    for i in 0..width {
+        let mut temp: u64 = nums[i][0];
+        if associated_operators[i] == "*" {
+            for x in 1..nums[i].len() {
+                temp *= nums[i][x];
+            }
+        } else {
+            for x in 1..nums[i].len() {
+                temp += nums[i][x];
+            }
+        }
+        result += temp;
+        println!("{} {}", temp, result)
+    }
+
+    Some(result)
 }
 
 #[cfg(test)]
